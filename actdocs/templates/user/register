@@ -1,0 +1,149 @@
+[% WRAPPER ui title = loc('Registration') %]
+[% USE date %]
+[% IF date.now > end_date %]
+<p>
+ {{Sorry, this conference is over.}}
+</p>
+[% ELSE %]
+
+[% PROCESS error
+   msgs = {
+     ERR_FIRST_NAME         => loc("You must enter your first name"),
+     ERR_LAST_NAME          => loc("You must enter your last name"),
+     ERR_EMAIL              => loc("You must enter your email"),
+     ERR_EMAIL_SYNTAX       => loc("Your email address looks bogus."),
+     ERR_TSHIRT             => loc("A valid T-shirt size is required."),
+     ERR_PHONE              => 'Необходимо ввести телефон',
+     ERR_COMPANY            => 'Необходимо ввести имя компании',
+     ERR_POSITION           => 'Необходимо ввести должность',
+     ERR_AGREE_DATA         => 'Вы должны согласится на обработку персональных данных',
+     ERR_AGREE_MEDIA        => 'Вы должны согласится на обработку изображений',
+  }
+%]
+
+<center>
+
+<form method="POST" action="[% global.request.r.uri %]">
+
+<table border="1" cellpadding="10" cellspacing="0"><tr><td>
+<table border="0" cellpadding="0" cellspacing="10">
+<tr>
+   <td align="right">
+      <label for="form-first-name">{{First Name}}</label>
+   </td>
+   <td>&nbsp;</td>
+   <td>
+      <input type="text" name="first_name" id="form-first-name"  value="[% first_name %]" size="25" maxlength="60" />
+   </td>
+</tr>
+<tr>
+   <td align="right">
+      <label for="form-last-name">{{Last Name}}</label>
+   </td>
+   <td>&nbsp;</td>
+   <td>
+      <input type="text" name="last_name" id="form-last-name"  value="[% last_name %]" size="25" maxlength="60" />
+   </td>
+</tr>
+<tr>
+   <td align="right">
+      <label for="form-email">{{Email}}</label>
+   </td>
+   <td>&nbsp;</td>
+   <td>
+      <input type="text" name="email" id="form-email"  value="[% email %]" size="25" maxlength="60" />
+   </td>
+</tr>
+<tr>
+   <td align="right">
+      <label for="form-phone">Телефон</label>
+   </td>
+   <td>&nbsp;</td>
+   <td>
+      <input type="text" name="phone" id="form-phone"  value="[% phone %]" size="25" maxlength="60" />
+   </td>
+</tr>
+<tr>
+   <td align="right">
+    <label for="form-tshirt-size">{{T-shirt size}}</label>
+   </td>
+   <td>&nbsp;</td>
+   <td>
+      <select name="tshirt_size" id="form-tshirt-size">
+         [% UNLESS tshirt_size %]<option value="" selected="selected" />[% END %]
+         [% FOREACH t = [ 'XS', 'XS (W)', 'S', 'S (W)', 'M', 'M (W)',
+                          'L', 'L (W)', 'XL', 'XL (W)', 'XLT', 'XXL',
+                          'XXL (W)', 'XXLT', 'XXXL', '4XL', '5XL', '6XL' ] %]
+         <option value="[% t %]"[% ' selected="selected"' IF tshirt_size == t %]>[% t %]</option>
+         [% END %]
+      </select>
+   </td>
+</tr>
+<tr>
+   <td align="right" valign="top">
+      {{Company}}
+   </td>
+   <td>&nbsp;</td>
+   <td valign="top">
+      <input type="text" name="company"  value="[% company %]" size="40" maxlength="120" /><br />
+   </td>
+</tr>
+<tr>
+   <td align="right" valign="top">
+      Должность
+   </td>
+   <td>&nbsp;</td>
+   <td valign="top">
+      <input type="text" name="position"  value="[% position %]" size="40" maxlength="120" /><br />
+   </td>
+</tr>
+
+<tr>
+   <td align="right" valign="top" colspan="3">
+        <p>
+      <input type="checkbox" name="agree_data"  value="1" />  Регистрируясь на это событие, вы подтверждаете ваше <a href="#" onclick="var el = document.getElementById('personal-data-agreement'); el.style.display = (el.style.display == 'none') ? '' : 'none'; return false;">согласие на обработку персональных данных</a>
+      </p>
+
+      <div style="margin-top: 10px; display:none;" id="personal-data-agreement" class="agreement">
+        <p>
+        Настоящим я, действуя свободно, своей волей и в своем интересе, даю свое согласие ООО «Мэйл.Ру» (125167, г. Москва, Ленинградский проспект д.39 стр.79) (далее – «Мэйл.Ру») и Группе Компаний на обработку предоставленных мною в форме регистрации персональных данных. При этом, под Группой Компаний понимается совокупность юридических лиц независимо от организационно-правовой формы, контролирующих Мэйл.Ру, контролируемых Мэйл.Ру или находящихся совместно с Мэйл.Ру под общим прямым или косвенным контролем.
+        </p>
+        <p>
+        Настоящее согласие дается мною для целей приглашения меня к участию и моего участия в мероприятиях, проводимых Мэйл.Ру и/или юридическими лицами, входящими в Группу компаний, а также для направления мне почтовых сообщений и смс-уведомлений от ООО «Мэйл.Ру» и юридических лиц Группы Компаний, содержащих приглашения на мероприятия, а также рекламно-информационные материалы о сервисах и продуктах Мэйл.Ру и Группы Компаний.
+        </p>
+        <p>
+        Согласие предоставляется мною для осуществления любых действий в отношении моих персональных данных, включая без ограничений следующие действия: сбор, систематизацию, накопление, хранение, запись на электронные носители и их хранение, составление перечней, маркировка, уточнение (обновление, изменение), использование, распространение (в том числе передачу), обезличивание, блокирование, уничтожение, передачу персональных данных между Мэйл.Ру и юридическими лицами, входящими в Группу Компаний.
+        </p>
+        <p>
+        Обработка персональных данных осуществляется Мэйл.Ру в объеме, который необходим для достижения каждой из вышеуказанных целей, в течение срока, составляющего 20 лет.
+        </p>
+        <p>
+        Согласие на обработку персональных данных может быть отозвано путем направления письменного уведомления в свободной форме Мэйл.Ру не менее чем за 1 месяц до момента отзыва согласия.
+        </p>
+        </div>
+   </td>
+</tr>
+
+<tr>
+   <td align="right" valign="top" colspan="3">
+      <p>
+      <input type="checkbox" name="agree_media"  value="1" /> Настоящим я даю свое согласие ООО «Мэйл.Ру» и Группе Компаний на воспроизведение, использование, распространение, доведение до всеобщего сведения, передачу в эфир и по кабелю своего изображения, содержащегося на видеозаписях и фотографиях, которые будут сделаны в ходе проведения мероприятий, проводимых ООО «Мэйл.Ру» и Группой Компаний, на обработку указанных видеозаписей и фотографий, в том числе на ретуширование, затемнение и иное изменение моего изображения.
+      </p>
+   </td>
+</tr>
+
+
+
+<tr>
+   <td colspan="2" align="right">
+      <input type="submit" name="join" value="{{Join}} [% global.conference.name %]" />
+   </td>
+</tr>
+</table>
+</td></tr></table>
+
+</form>
+</center>
+
+[% END %]
+[% END %]
