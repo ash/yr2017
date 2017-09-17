@@ -1,2 +1,2 @@
-# yr2015
-YAPC::Russia 2015
+# yr2017
+YAPC::Russia 2017
